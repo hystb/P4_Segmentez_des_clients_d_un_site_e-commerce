@@ -1,11 +1,24 @@
 SELECT 
+    COUNT(DISTINCT o.customer_id) AS total_customers
+FROM
+    orders o
+WHERE
+    o.order_purchase_timestamp < DATE('2017-09-04');
+
+SELECT
+    MIN(o.order_purchase_timestamp) AS first_transaction_date,
+    MAX(o.order_purchase_timestamp) AS last_transaction_date
+FROM
+    orders o;
+
+SELECT 
 	* 
 FROM 
 	orders 
 WHERE
 	order_status !='canceled'
 AND
-	order_purchase_timestamp >= DATE('now', '-30 days') 
+	order_purchase_timestamp >= DATE('2018-10-17', '-30 days') 
 AND
 	JULIANDAY(order_delivered_customer_date) - JULIANDAY(order_estimated_delivery_date) >=3;
 
@@ -41,7 +54,7 @@ new_sellers AS (
     FROM 
         seller_first_sale
     WHERE 
-        first_sale_date >= DATE('now', '-90 days')
+        first_sale_date >= DATE('2018-10-17', '-90 days')
 ),
 seller_sales AS (
     SELECT 
@@ -76,7 +89,7 @@ WITH recent_reviews AS (
     JOIN 
         customers c ON o.customer_id = c.customer_id
     WHERE 
-        r.review_creation_date >= DATE('now', '-12 months')
+        r.review_creation_date >= DATE('2018-10-17', '-12 months')
 ),
 zipcode_review_stats AS (
     SELECT 
