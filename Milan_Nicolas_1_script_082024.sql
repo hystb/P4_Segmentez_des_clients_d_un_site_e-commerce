@@ -1,29 +1,16 @@
 SELECT 
-    COUNT(DISTINCT o.customer_id) AS total_customers
-FROM
-    orders o
-WHERE
-    o.order_purchase_timestamp < DATE('2017-09-04');
-
-SELECT
-    MIN(o.order_purchase_timestamp) AS first_transaction_date,
-    MAX(o.order_purchase_timestamp) AS last_transaction_date
-FROM
-    orders o;
-
-SELECT 
 	* 
 FROM 
 	orders 
 WHERE
 	order_status !='canceled'
 AND
-	order_purchase_timestamp >= DATE('2018-10-17', '-30 days') 
+	order_purchase_timestamp >= DATE('2018-10-17', '-90 days')
 AND
 	JULIANDAY(order_delivered_customer_date) - JULIANDAY(order_estimated_delivery_date) >=3;
 
 SELECT 
-    s.seller_id, 
+    s.seller_id,
     SUM(oi.price) AS total_revenue
 FROM 
     order_items oi
@@ -32,7 +19,7 @@ JOIN
 GROUP BY 
     s.seller_id
 HAVING 
-    total_revenue >100000;
+    total_revenue > 100000;
 
 
 WITH seller_first_sale AS (
